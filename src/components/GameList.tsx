@@ -1,4 +1,4 @@
-import officialSchedule from "../officialSchedule/202102.json";
+import officialSchedule from '../officialSchedule/202102.json';
 
 type GameListProps = {
   gameData: any;
@@ -30,24 +30,13 @@ function GameDetail({ game, selectedDate }: GameDetailProps): JSX.Element {
   const visitorTeamScore = game.visitor_team_score;
   const homeTeamScore = game.home_team_score;
   const gameId = getGameId({ homeTeam, visitorTeam, dateString: selectedDate });
-  const officialBoxScoreLink = getOfficialBoxScoreLink({
-    homeTeam,
-    visitorTeam,
-    gameId,
-  });
+  const officialBoxScoreLink = getOfficialBoxScoreLink({ homeTeam, visitorTeam, gameId });
 
   return (
     <div>
       {visitorTeam} {visitorTeamScore} v.s. {homeTeam} {homeTeamScore}
       <span style={{ marginLeft: 30 }}>
-        <a
-          href={officialBoxScoreLink}
-          target="_blank"
-          rel="noreferrer noopener"
-          style={{
-            color: "blue",
-          }}
-        >
+        <a href={officialBoxScoreLink} target="_blank" rel="noreferrer noopener" style={{ color: 'blue' }}>
           BoxScore
         </a>
       </span>
@@ -61,11 +50,7 @@ type GetOfficialBoxScoreLink = {
   gameId: string;
 };
 
-function getOfficialBoxScoreLink({
-  homeTeam,
-  visitorTeam,
-  gameId,
-}: GetOfficialBoxScoreLink) {
+function getOfficialBoxScoreLink({ homeTeam, visitorTeam, gameId }: GetOfficialBoxScoreLink) {
   return `https://www.nba.com/game/${visitorTeam.toLowerCase()}-vs-${homeTeam.toLowerCase()}-${gameId}/box-score#box-score`;
 }
 
@@ -75,30 +60,22 @@ type GetGameId = {
   dateString: string;
 };
 
-export function getGameId({
-  homeTeam,
-  visitorTeam,
-  dateString,
-}: GetGameId): string {
+export function getGameId({ homeTeam, visitorTeam, dateString }: GetGameId): string {
   // e.g. 20210211/ORLGSW
-  const targetGameCode = `${dateString.replaceAll(
-    "-",
-    ""
-  )}/${visitorTeam}${homeTeam}`;
-
+  const targetGameCode = `${dateString.replaceAll('-', '')}/${visitorTeam}${homeTeam}`;
   const targetGameDate = parseDateFormatToOfficial(dateString);
+
   const targetOfficialGames = officialSchedule.leagueSchedule.gameDates.find(
-    ({ gameDate }) => gameDate.split(" ")[0] === targetGameDate
+    ({ gameDate }) => gameDate.split(' ')[0] === targetGameDate,
   );
-  const targetOfficialGame = targetOfficialGames?.games?.find(
-    ({ gameCode }) => gameCode === targetGameCode
-  );
-  return targetOfficialGame?.gameId || "";
+  const targetOfficialGame = targetOfficialGames?.games?.find(({ gameCode }) => gameCode === targetGameCode);
+
+  return targetOfficialGame?.gameId || '';
 }
 
 // 2021-02-11 --> 11/2/2021
 function parseDateFormatToOfficial(date: string) {
-  const splitDate = date.split("-");
+  const splitDate = date.split('-');
   const year = splitDate[0];
   const month = parseInt(splitDate[1], 10);
   const day = parseInt(splitDate[2], 10);

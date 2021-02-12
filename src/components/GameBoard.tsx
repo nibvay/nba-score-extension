@@ -1,19 +1,16 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import GameList from "./GameList";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import GameList from './GameList';
+
+const PREVIOUS_COUNT = 5;
 
 function GameBoard(): JSX.Element {
   const currentDate = new Date();
-  const previousDate = getPreviousDate({
-    today: currentDate,
-    previousCount: 5,
-  });
+  const previousDate = getPreviousDate({ today: currentDate, previousCount: PREVIOUS_COUNT });
 
   const [selectedDate, setSelectedDate] = useState<string>(previousDate[0]);
   const [gameData, setGameData] = useState<any>([]);
-  const [url, setUrl] = useState(
-    `https://www.balldontlie.io/api/v1/games?dates[]=${previousDate[0]}`
-  );
+  const [url, setUrl] = useState(`https://www.balldontlie.io/api/v1/games?dates[]=${previousDate[0]}`);
 
   useEffect(() => {
     const fetchBallData = async () => {
@@ -34,9 +31,7 @@ function GameBoard(): JSX.Element {
       <select
         name="date"
         onChange={(e) => {
-          setUrl(
-            `https://www.balldontlie.io/api/v1/games?dates[]=${e.target.value}`
-          );
+          setUrl(`https://www.balldontlie.io/api/v1/games?dates[]=${e.target.value}`);
           setSelectedDate(e.target.value);
         }}
       >
@@ -54,10 +49,7 @@ function GameBoard(): JSX.Element {
 export default GameBoard;
 
 function formatDate(date: Date) {
-  const month =
-    date.getMonth() + 1 < 10
-      ? 0 + `${date.getMonth() + 1}`
-      : date.getMonth() + 1;
+  const month = date.getMonth() + 1 < 10 ? 0 + `${date.getMonth() + 1}` : date.getMonth() + 1;
   return `${date.getFullYear()}-${month}-${date.getDate()}`;
 }
 
