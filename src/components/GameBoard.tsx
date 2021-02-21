@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Select } from '@chakra-ui/react';
 import GameList from './GameList';
 
 const PREVIOUS_COUNT = 5;
@@ -13,6 +14,7 @@ function GameBoard(): JSX.Element {
   const [url, setUrl] = useState(`https://www.balldontlie.io/api/v1/games?dates[]=${previousDate[0]}`);
 
   useEffect(() => {
+    // TODO: set loading
     const fetchBallData = async () => {
       try {
         const data = await axios(url);
@@ -27,9 +29,10 @@ function GameBoard(): JSX.Element {
 
   return (
     <>
-      <label>date:</label>
-      <select
-        name="date"
+      <Select
+        size="sm"
+        m={3}
+        width={300}
         onChange={(e) => {
           setUrl(`https://www.balldontlie.io/api/v1/games?dates[]=${e.target.value}`);
           setSelectedDate(e.target.value);
@@ -40,7 +43,7 @@ function GameBoard(): JSX.Element {
             {date}
           </option>
         ))}
-      </select>
+      </Select>
       <GameList gameData={gameData} selectedDate={selectedDate} />
     </>
   );

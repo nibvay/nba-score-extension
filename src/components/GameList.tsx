@@ -1,4 +1,7 @@
+import { Box, HStack, Text, Center, Flex, Spacer, Link } from '@chakra-ui/react';
+import { TeamName } from '../enums';
 import officialSchedule from '../officialSchedule/202102.json';
+import TeamLogoPicker from './teamLogos/TeamLogoPicker';
 
 type GameListProps = {
   gameData: any;
@@ -12,10 +15,23 @@ function GameList({ gameData, selectedDate }: GameListProps): JSX.Element {
     <>
       {gameData.map((game: any) => (
         <GameDetail key={game.id} game={game} selectedDate={selectedDate} />
+        // {/* <TopPerformers key={game.id} game={game} /> */}
       ))}
     </>
   );
 }
+
+// Player record
+// https://www.balldontlie.io/api/v1/stats?seasons[]=2020&game_ids[]=127893
+// type TopPerformersProps = {
+//   game: any;
+// };
+// function TopPerformers({ game }: TopPerformersProps): JSX.Element {
+//   console.log({ game });
+//   const season = game.season;
+
+//   return <div></div>;
+// }
 
 export default GameList;
 
@@ -25,22 +41,42 @@ type GameDetailProps = {
 };
 
 function GameDetail({ game, selectedDate }: GameDetailProps): JSX.Element {
-  const visitorTeam = game.visitor_team.abbreviation;
+  const visitorTeam = game.visitor_team.abbreviation as TeamName;
   const homeTeam = game.home_team.abbreviation;
   const visitorTeamScore = game.visitor_team_score;
   const homeTeamScore = game.home_team_score;
   const gameId = getGameId({ homeTeam, visitorTeam, dateString: selectedDate });
   const officialBoxScoreLink = getOfficialBoxScoreLink({ homeTeam, visitorTeam, gameId });
+  const scoreText = `${visitorTeamScore} : ${homeTeamScore}`;
 
   return (
-    <div>
-      {visitorTeam} {visitorTeamScore} v.s. {homeTeam} {homeTeamScore}
-      <span style={{ marginLeft: 30 }}>
+    <Box>
+      <HStack align="center">
+        <Flex width={190}>
+          <Box align="center">
+            <TeamLogoPicker teamName={visitorTeam} />
+            <Text>{visitorTeam}</Text>
+          </Box>
+          <Spacer />
+          <Center>
+            <Link href={officialBoxScoreLink} target="_blank" rel="noreferrer noopener" fontWeight={500}>
+              {scoreText}
+            </Link>
+          </Center>
+          <Spacer />
+          <Box align="center" alignItems={'right'}>
+            <TeamLogoPicker teamName={homeTeam} />
+            <Text>{homeTeam}</Text>
+          </Box>
+        </Flex>
+        {/* <Box>1234</Box> */}
+      </HStack>
+      {/* <Box>
         <a href={officialBoxScoreLink} target="_blank" rel="noreferrer noopener" style={{ color: 'blue' }}>
           BoxScore
         </a>
-      </span>
-    </div>
+      </Box> */}
+    </Box>
   );
 }
 
