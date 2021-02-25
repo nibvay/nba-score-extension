@@ -9,19 +9,21 @@ function GameBoard(): JSX.Element {
   const currentDate = new Date();
   const previousDate = getPreviousDate({ today: currentDate, previousCount: PREVIOUS_COUNT });
 
-  const [selectedDate, setSelectedDate] = useState<string>(previousDate[0]);
+  const [selectedDate, setSelectedDate] = useState(previousDate[0]);
   const [gameData, setGameData] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [url, setUrl] = useState(`https://www.balldontlie.io/api/v1/games?dates[]=${previousDate[0]}`);
 
   useEffect(() => {
-    // TODO: set loading
     const fetchBallData = async () => {
+      setIsLoading(true);
       try {
         const data = await axios(url);
         setGameData(data.data.data);
       } catch (error) {
         console.error(error);
       }
+      setIsLoading(false);
     };
 
     fetchBallData();
@@ -44,7 +46,7 @@ function GameBoard(): JSX.Element {
           </option>
         ))}
       </Select>
-      <GameList gameData={gameData} selectedDate={selectedDate} />
+      <GameList isLoading={isLoading} gameData={gameData} selectedDate={selectedDate} />
     </>
   );
 }

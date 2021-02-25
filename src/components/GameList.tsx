@@ -1,15 +1,16 @@
-import { Box, HStack, Text, Center, Flex, Spacer, Link } from '@chakra-ui/react';
-import { TeamName } from '../enums';
+import { Box, HStack, Text, Center, Flex, Link, CircularProgress } from '@chakra-ui/react';
+import { TeamName, ScoreLeadStatus } from '../enums';
 import officialSchedule from '../officialSchedule/202102.json';
 import TeamLogoPicker from './teamLogos/TeamLogoPicker';
 
 type GameListProps = {
+  isLoading: boolean;
   gameData: any;
   selectedDate: string;
 };
 
-function GameList({ gameData, selectedDate }: GameListProps): JSX.Element {
-  if (gameData.length === 0) return <div>loading</div>;
+function GameList({ isLoading, gameData, selectedDate }: GameListProps): JSX.Element {
+  if (isLoading) return <CircularProgress m={150} alignItems={'center'} isIndeterminate color="orange.300" />;
 
   return (
     <>
@@ -41,29 +42,38 @@ type GameDetailProps = {
 };
 
 function GameDetail({ game, selectedDate }: GameDetailProps): JSX.Element {
+  const { status } = game;
   const visitorTeam = game.visitor_team.abbreviation as TeamName;
   const homeTeam = game.home_team.abbreviation;
-  const visitorTeamScore = game.visitor_team_score;
-  const homeTeamScore = game.home_team_score;
+  const visitorTeamScore = parseInt(game.visitor_team_score, 0);
+  const homeTeamScore = parseInt(game.home_team_score, 0);
   const gameId = getGameId({ homeTeam, visitorTeam, dateString: selectedDate });
   const officialBoxScoreLink = getOfficialBoxScoreLink({ homeTeam, visitorTeam, gameId });
-  const scoreText = `${visitorTeamScore} : ${homeTeamScore}`;
+  const scoreLeadTeam = getScoreLeadTeam(visitorTeamScore, homeTeamScore);
 
   return (
-    <Box>
+    <Box ml="20px">
       <HStack align="center">
-        <Flex width={190}>
+        <Flex>
           <Box align="center">
             <TeamLogoPicker teamName={visitorTeam} />
             <Text>{visitorTeam}</Text>
           </Box>
-          <Spacer />
           <Center>
-            <Link href={officialBoxScoreLink} target="_blank" rel="noreferrer noopener" fontWeight={500}>
-              {scoreText}
-            </Link>
+            <Flex textAlign={'center'}>
+              <Box w="60px" fontWeight={scoreLeadTeam !== ScoreLeadStatus.visitor ? 350 : 900}>
+                {visitorTeamScore}
+              </Box>
+              <Box w="60px">
+                <Link href={officialBoxScoreLink} target="_blank" rel="noreferrer noopener" fontWeight={500}>
+                  {status}
+                </Link>
+              </Box>
+              <Box w="60px" fontWeight={scoreLeadTeam !== ScoreLeadStatus.home ? 350 : 900}>
+                {homeTeamScore}
+              </Box>
+            </Flex>
           </Center>
-          <Spacer />
           <Box align="center" alignItems={'right'}>
             <TeamLogoPicker teamName={homeTeam} />
             <Text>{homeTeam}</Text>
@@ -71,11 +81,6 @@ function GameDetail({ game, selectedDate }: GameDetailProps): JSX.Element {
         </Flex>
         {/* <Box>1234</Box> */}
       </HStack>
-      {/* <Box>
-        <a href={officialBoxScoreLink} target="_blank" rel="noreferrer noopener" style={{ color: 'blue' }}>
-          BoxScore
-        </a>
-      </Box> */}
     </Box>
   );
 }
@@ -116,4 +121,10 @@ function parseDateFormatToOfficial(date: string) {
   const month = parseInt(splitDate[1], 10);
   const day = parseInt(splitDate[2], 10);
   return `${month}/${day}/${year}`;
+}
+
+function getScoreLeadTeam(visitor: number, home: number) {
+  if (visitor > home) return ScoreLeadStatus.visitor;
+  if (visitor < home) return ScoreLeadStatus.home;
+  return ScoreLeadStatus.tie;
 }

@@ -30,3 +30,9 @@ export enum TeamName {
   UTA = 'UTA',
   WAS = 'WAS',
 }
+
+export enum ScoreLeadStatus {
+  visitor = 'visitor',
+  home = 'home',
+  tie = 'tie',
+}
