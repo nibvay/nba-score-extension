@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Select } from '@chakra-ui/react';
-import GameList from './GameList';
+import GameList from '../../components/GameList';
 
 const PREVIOUS_COUNT = 5;
 
@@ -30,7 +30,7 @@ function GameBoard(): JSX.Element {
   }, [url]);
 
   return (
-    <>
+    <div>
       <Select
         size="sm"
         m={3}
@@ -47,7 +47,7 @@ function GameBoard(): JSX.Element {
         ))}
       </Select>
       <GameList isLoading={isLoading} gameData={gameData} selectedDate={selectedDate} />
-    </>
+    </div>
   );
 }
 
