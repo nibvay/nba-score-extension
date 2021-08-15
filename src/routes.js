@@ -5,18 +5,18 @@ import Setting from './scenes/Setting/Setting';
 const routes = [
   {
     path: "/login",
-    component: Login,
     tabName: 'LOGIN',
+    component: Login,
   },
   {
     path: "/game-board",
-    component: GameBoard,
     tabName: 'GAME BOARD',
+    component: GameBoard,
   },
   {
     path: "/setting",
-    component: Setting,
     tabName: 'SETTING',
+    component: Setting,
   }
 ];
 

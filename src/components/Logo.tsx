@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const LogoStyled = styled.div`
   padding: 1em;
@@ -8,7 +8,7 @@ const LogoStyled = styled.div`
 `;
 
 function Logo() {
-  return <LogoStyled>NBA-SCORE</LogoStyled>
+  return <LogoStyled>NBA-SCORE</LogoStyled>;
 }
 
 export default Logo;

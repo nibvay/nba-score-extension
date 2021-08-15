@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const LoginHeader = styled('div')`
   background-color: gray;
@@ -9,6 +9,6 @@ const Login = () => {
     <LoginHeader>
       <div>in login page</div>
     </LoginHeader>
-  )
-}
+  );
+};
 export default Login;

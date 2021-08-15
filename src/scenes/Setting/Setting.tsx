@@ -1,9 +1,5 @@
 const Setting = () => {
-  return (
-    <div>
-      In Setting page...
-    </div>
-  )
-}
+  return <div>In Setting page...</div>;
+};
 
 export default Setting;

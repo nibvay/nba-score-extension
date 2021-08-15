@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import styled from "styled-components";
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import styled from 'styled-components';
 
 import routes from './routes';
 import SideMenu from './components/SideMenu';
@@ -17,11 +17,7 @@ function App() {
         <SideMenu />
         <Switch>
           {routes.map(({ path, component }) => (
-            <Route
-              key={`route_path_${path}`}
-              path={path}
-              component={component}
-            />
+            <Route key={`route_path_${path}`} path={path} component={component} />
           ))}
         </Switch>
       </LayoutStyled>
